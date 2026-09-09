@@ -1,0 +1,459 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==================== デフォルトのCSS変数（Earthテーマ） ==================== */
+
+:root {
+  --color-cream: #f6f0e4;
+  --color-paper: #fdfaf2;
+  --color-sand: #e7dcc6;
+  --color-sand-deep: #d8c8ac;
+  --color-bark: #33261a;
+  --color-espresso: #4c3a28;
+  --color-cocoa: #6e5a45;
+  --color-latte: #9a8670;
+  --color-caramel: #c08a3e;
+  --color-caramel-deep: #a8732c;
+  --color-clay: #b4713b;
+  --color-moss: #6e7f4f;
+  --color-moss-deep: #57683d;
+
+  --shadow-soft: 0 1px 2px rgb(51 38 26 / 0.05), 0 6px 20px -8px rgb(51 38 26 / 0.14);
+  --shadow-lift: 0 2px 4px rgb(51 38 26 / 0.07), 0 16px 36px -12px rgb(51 38 26 / 0.24);
+}
+
+/* ==================== テーマ定義 ==================== */
+
+/* Earth（デフォルト） */
+[data-theme="earth"] {
+  --color-cream: #f6f0e4;
+  --color-paper: #fdfaf2;
+  --color-sand: #e7dcc6;
+  --color-sand-deep: #d8c8ac;
+  --color-bark: #33261a;
+  --color-espresso: #4c3a28;
+  --color-cocoa: #6e5a45;
+  --color-latte: #9a8670;
+  --color-caramel: #c08a3e;
+  --color-caramel-deep: #a8732c;
+  --color-clay: #b4713b;
+  --color-moss: #6e7f4f;
+  --color-moss-deep: #57683d;
+}
+
+/* Paper */
+[data-theme="paper"] {
+  --color-cream: #f8f9fa;
+  --color-paper: #ffffff;
+  --color-sand: #e9ecef;
+  --color-sand-deep: #dee2e6;
+  --color-bark: #212529;
+  --color-espresso: #343a40;
+  --color-cocoa: #495057;
+  --color-latte: #6c757d;
+  --color-caramel: #6c63ff;
+  --color-caramel-deep: #5a52d5;
+  --color-clay: #dc3545;
+  --color-moss: #28a745;
+  --color-moss-deep: #1e7e34;
+}
+
+/* Ember */
+[data-theme="ember"] {
+  --color-cream: #fdf5f0;
+  --color-paper: #fffaf5;
+  --color-sand: #f5e1d0;
+  --color-sand-deep: #e8c9b0;
+  --color-bark: #2d1810;
+  --color-espresso: #4a2c1a;
+  --color-cocoa: #6b4430;
+  --color-latte: #8b6347;
+  --color-caramel: #e85d3a;
+  --color-caramel-deep: #d4432a;
+  --color-clay: #c0392b;
+  --color-moss: #27ae60;
+  --color-moss-deep: #1e8449;
+}
+
+/* Neon */
+[data-theme="neon"] {
+  --color-cream: #1a1a2e;
+  --color-paper: #16213e;
+  --color-sand: #0f3460;
+  --color-sand-deep: #1a4a7a;
+  --color-bark: #eaeaea;
+  --color-espresso: #f5f5f5;
+  --color-cocoa: #d0d0d0;
+  --color-latte: #a0a0a0;
+  --color-caramel: #00d9ff;
+  --color-caramel-deep: #00b8d9;
+  --color-clay: #ff6b6b;
+  --color-moss: #4ecdc4;
+  --color-moss-deep: #3db8b0;
+}
+
+/* Ocean */
+[data-theme="ocean"] {
+  --color-cream: #f0f8ff;
+  --color-paper: #ffffff;
+  --color-sand: #d6eaf8;
+  --color-sand-deep: #aed6f1;
+  --color-bark: #1b4f72;
+  --color-espresso: #21618c;
+  --color-cocoa: #2e86c1;
+  --color-latte: #5dade2;
+  --color-caramel: #17a2b8;
+  --color-caramel-deep: #138496;
+  --color-clay: #e74c3c;
+  --color-moss: #27ae60;
+  --color-moss-deep: #1e8449;
+}
+
+/* Forest */
+[data-theme="forest"] {
+  --color-cream: #f5f7f2;
+  --color-paper: #fafbf8;
+  --color-sand: #d4dbc8;
+  --color-sand-deep: #b8c4a8;
+  --color-bark: #2d3a2e;
+  --color-espresso: #3d4f3e;
+  --color-cocoa: #4a5d4b;
+  --color-latte: #6b7d6c;
+  --color-caramel: #8b9d6f;
+  --color-caramel-deep: #6b7d4f;
+  --color-clay: #a0522d;
+  --color-moss: #4a6741;
+  --color-moss-deep: #3a5431;
+}
+
+/* Midnight */
+[data-theme="midnight"] {
+  --color-cream: #0f1419;
+  --color-paper: #1a1f2e;
+  --color-sand: #2a3040;
+  --color-sand-deep: #3a4050;
+  --color-bark: #e8eaf0;
+  --color-espresso: #d0d4dc;
+  --color-cocoa: #b0b4bc;
+  --color-latte: #808490;
+  --color-caramel: #7c9cbf;
+  --color-caramel-deep: #5c7c9f;
+  --color-clay: #bf7c7c;
+  --color-moss: #7cbf8f;
+  --color-moss-deep: #5c9f6f;
+}
+
+/* Pastel */
+[data-theme="pastel"] {
+  --color-cream: #fef9f3;
+  --color-paper: #ffffff;
+  --color-sand: #f0e6f6;
+  --color-sand-deep: #e0d0e8;
+  --color-bark: #5a4a6a;
+  --color-espresso: #6a5a7a;
+  --color-cocoa: #7a6a8a;
+  --color-latte: #9a8aaa;
+  --color-caramel: #ffb3ba;
+  --color-caramel-deep: #ff9aa2;
+  --color-clay: #ff9a9e;
+  --color-moss: #baffc9;
+  --color-moss-deep: #9affb9;
+}
+
+/* Vintage */
+[data-theme="vintage"] {
+  --color-cream: #f4e8d0;
+  --color-paper: #faf3e3;
+  --color-sand: #d4c4a8;
+  --color-sand-deep: #b8a888;
+  --color-bark: #3d2f1f;
+  --color-espresso: #5c4a32;
+  --color-cocoa: #7a6548;
+  --color-latte: #9a8568;
+  --color-caramel: #b8860b;
+  --color-caramel-deep: #8b6508;
+  --color-clay: #a0522d;
+  --color-moss: #6b8e23;
+  --color-moss-deep: #556b2f;
+}
+
+/* Monochrome */
+[data-theme="monochrome"] {
+  --color-cream: #f5f5f5;
+  --color-paper: #ffffff;
+  --color-sand: #e0e0e0;
+  --color-sand-deep: #c0c0c0;
+  --color-bark: #1a1a1a;
+  --color-espresso: #2d2d2d;
+  --color-cocoa: #4a4a4a;
+  --color-latte: #6a6a6a;
+  --color-caramel: #333333;
+  --color-caramel-deep: #1a1a1a;
+  --color-clay: #5a5a5a;
+  --color-moss: #4a4a4a;
+  --color-moss-deep: #2d2d2d;
+}
+
+/* Carbon */
+[data-theme="carbon"] {
+  --color-cream: #1a1a1a;
+  --color-paper: #2d2d2d;
+  --color-sand: #3d3d3d;
+  --color-sand-deep: #4d4d4d;
+  --color-bark: #e0e0e0;
+  --color-espresso: #c0c0c0;
+  --color-cocoa: #a0a0a0;
+  --color-latte: #808080;
+  --color-caramel: #ff6b35;
+  --color-caramel-deep: #e55a2b;
+  --color-clay: #ff4500;
+  --color-moss: #00d9ff;
+  --color-moss-deep: #00b8d9;
+}
+
+/* Obsidian */
+[data-theme="obsidian"] {
+  --color-cream: #0a0a0a;
+  --color-paper: #1a1a1a;
+  --color-sand: #2a2a2a;
+  --color-sand-deep: #3a3a3a;
+  --color-bark: #f5f5f5;
+  --color-espresso: #e0e0e0;
+  --color-cocoa: #c0c0c0;
+  --color-latte: #a0a0a0;
+  --color-caramel: #d4af37;
+  --color-caramel-deep: #b8941e;
+  --color-clay: #ffd700;
+  --color-moss: #c0c0c0;
+  --color-moss-deep: #a0a0a0;
+}
+
+/* Cyberpunk */
+[data-theme="cyberpunk"] {
+  --color-cream: #0d0d0d;
+  --color-paper: #1a1a2e;
+  --color-sand: #2a2a4e;
+  --color-sand-deep: #3a3a6e;
+  --color-bark: #ffffff;
+  --color-espresso: #e0e0ff;
+  --color-cocoa: #c0c0ff;
+  --color-latte: #a0a0ff;
+  --color-caramel: #ff00ff;
+  --color-caramel-deep: #d900d9;
+  --color-clay: #ff0080;
+  --color-moss: #00ffff;
+  --color-moss-deep: #00d9d9;
+}
+
+/* Titanium */
+[data-theme="titanium"] {
+  --color-cream: #f5f5f7;
+  --color-paper: #ffffff;
+  --color-sand: #e8e8ed;
+  --color-sand-deep: #d2d2d7;
+  --color-bark: #1d1d1f;
+  --color-espresso: #2d2d2f;
+  --color-cocoa: #424245;
+  --color-latte: #6e6e73;
+  --color-caramel: #0071e3;
+  --color-caramel-deep: #0056b3;
+  --color-clay: #86868b;
+  --color-moss: #34c759;
+  --color-moss-deep: #28a745;
+}
+
+/* ==================== 基本スタイル ==================== */
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", system-ui, sans-serif;
+  color: var(--color-bark);
+  background: var(--color-cream);
+  min-height: 100dvh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* テーマごとの背景グラデーション */
+[data-theme="earth"] body {
+  background:
+    radial-gradient(52rem 30rem at 88% -8%, rgb(192 138 62 / 0.17), transparent 62%),
+    radial-gradient(40rem 26rem at -18% 20%, rgb(110 127 79 / 0.13), transparent 60%),
+    radial-gradient(48rem 32rem at 50% 116%, rgb(180 113 59 / 0.15), transparent 64%),
+    var(--color-cream);
+}
+
+[data-theme="paper"] body {
+  background:
+    radial-gradient(40rem 24rem at 90% -10%, rgb(108 99 255 / 0.08), transparent 60%),
+    var(--color-cream);
+}
+
+[data-theme="ember"] body {
+  background:
+    radial-gradient(52rem 30rem at 88% -8%, rgb(232 93 58 / 0.15), transparent 62%),
+    radial-gradient(40rem 26rem at -18% 20%, rgb(192 57 43 / 0.1), transparent 60%),
+    var(--color-cream);
+}
+
+[data-theme="neon"] body {
+  background:
+    radial-gradient(52rem 30rem at 88% -8%, rgb(0 217 255 / 0.08), transparent 62%),
+    radial-gradient(40rem 26rem at -18% 20%, rgb(78 205 196 / 0.06), transparent 60%),
+    var(--color-cream);
+}
+
+[data-theme="ocean"] body {
+  background:
+    radial-gradient(52rem 30rem at 88% -8%, rgb(23 162 184 / 0.12), transparent 62%),
+    radial-gradient(40rem 26rem at -18% 20%, rgb(39 174 96 / 0.08), transparent 60%),
+    var(--color-cream);
+}
+
+[data-theme="forest"] body {
+  background:
+    radial-gradient(52rem 30rem at 88% -8%, rgb(74 103 65 / 0.15), transparent 62%),
+    radial-gradient(40rem 26rem at -18% 20%, rgb(139 157 111 / 0.12), transparent 60%),
+    radial-gradient(48rem 32rem at 50% 116%, rgb(58 84 49 / 0.1), transparent 64%),
+    var(--color-cream);
+}
+
+[data-theme="midnight"] body {
+  background:
+    radial-gradient(52rem 30rem at 88% -8%, rgb(124 156 191 / 0.08), transparent 62%),
+    radial-gradient(40rem 26rem at -18% 20%, rgb(92 124 159 / 0.06), transparent 60%),
+    var(--color-cream);
+}
+
+[data-theme="pastel"] body {
+  background:
+    radial-gradient(52rem 30rem at 88% -8%, rgb(255 179 186 / 0.12), transparent 62%),
+    radial-gradient(40rem 26rem at -18% 20%, rgb(186 255 201 / 0.1), transparent 60%),
+    radial-gradient(48rem 32rem at 50% 116%, rgb(255 186 207 / 0.08), transparent 64%),
+    var(--color-cream);
+}
+
+[data-theme="vintage"] body {
+  background:
+    radial-gradient(52rem 30rem at 88% -8%, rgb(184 134 11 / 0.12), transparent 62%),
+    radial-gradient(40rem 26rem at -18% 20%, rgb(160 82 45 / 0.1), transparent 60%),
+    radial-gradient(48rem 32rem at 50% 116%, rgb(139 101 8 / 0.08), transparent 64%),
+    var(--color-cream);
+}
+
+[data-theme="monochrome"] body {
+  background:
+    radial-gradient(52rem 30rem at 88% -8%, rgb(0 0 0 / 0.03), transparent 62%),
+    radial-gradient(40rem 26rem at -18% 20%, rgb(0 0 0 / 0.02), transparent 60%),
+    var(--color-cream);
+}
+
+[data-theme="carbon"] body {
+  background:
+    radial-gradient(52rem 30rem at 88% -8%, rgb(255 107 53 / 0.15), transparent 62%),
+    radial-gradient(40rem 26rem at -18% 20%, rgb(0 217 255 / 0.1), transparent 60%),
+    var(--color-cream);
+}
+
+[data-theme="obsidian"] body {
+  background:
+    radial-gradient(52rem 30rem at 88% -8%, rgb(212 175 55 / 0.12), transparent 62%),
+    radial-gradient(40rem 26rem at -18% 20%, rgb(255 215 0 / 0.08), transparent 60%),
+    var(--color-cream);
+}
+
+[data-theme="cyberpunk"] body {
+  background:
+    radial-gradient(52rem 30rem at 88% -8%, rgb(255 0 255 / 0.15), transparent 62%),
+    radial-gradient(40rem 26rem at -18% 20%, rgb(0 255 255 / 0.1), transparent 60%),
+    radial-gradient(48rem 32rem at 50% 116%, rgb(255 0 128 / 0.08), transparent 64%),
+    var(--color-cream);
+}
+
+[data-theme="titanium"] body {
+  background:
+    radial-gradient(52rem 30rem at 88% -8%, rgb(0 113 227 / 0.08), transparent 62%),
+    radial-gradient(40rem 26rem at -18% 20%, rgb(134 134 139 / 0.06), transparent 60%),
+    var(--color-cream);
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+::selection {
+  background: rgb(192 138 62 / 0.35);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-caramel);
+  outline-offset: 2px;
+}
+
+.tap {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* アニメーション */
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.anim-fade {
+  animation: fade 0.3s ease-out;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.anim-rise {
+  animation: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes pop {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.anim-pop {
+  animation: pop 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes sheet-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.anim-sheet-up {
+  animation: sheet-up 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+.anim-flicker {
+  animation: flicker 2s ease-in-out infinite;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal-in {
+  opacity: 1;
+  transform: translateY(0);
+}
