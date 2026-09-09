@@ -18,10 +18,10 @@ import {
 import { useEffect, useMemo, useRef, useState } from "react";
 import { SIZE_FIELDS, bodyVisual, type SizeKey } from "../data/meta";
 import { dayLabel, toIso } from "../lib/format";
-import { compressImages, formatFileSize } from "../lib/imageUtils";
+import { compressImages } from "../lib/imageUtils";
 import { sortedParts, useStore } from "../store/useStore";
 import { useUiStore } from "../store/useUiStore";
-import type { DataTab, SizeRecord, Template, WorkoutRecord } from "../types";
+import type { DataTab, SizeRecord, WorkoutRecord } from "../types";
 import ImageModal from "./ImageModal";
 import Sheet from "./Sheet";
 

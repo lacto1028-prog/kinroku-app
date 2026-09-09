@@ -13,12 +13,10 @@ import {
   Palette,
   RotateCcw,
   Smartphone,
-  Target,
   Trash2,
   type LucideIcon,
 } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { toIso } from "../lib/format";
 import { useStore } from "../store/useStore";
 import { useUiStore } from "../store/useUiStore";
 import type { BackupData } from "../types";
