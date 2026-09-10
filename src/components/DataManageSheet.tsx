@@ -19,10 +19,10 @@ import {
 import { useEffect, useMemo, useRef, useState } from "react";
 import { SIZE_FIELDS, bodyVisual, type SizeKey } from "../data/meta";
 import { dayLabel, toIso } from "../lib/format";
-import { compressImages, formatFileSize } from "../lib/imageUtils";
+import { compressImages } from "../lib/imageUtils";
 import { sortedParts, useStore } from "../store/useStore";
 import { useUiStore } from "../store/useUiStore";
-import type { DataTab, SizeRecord, Template, WorkoutRecord } from "../types";
+import type { DataTab, SizeRecord, WorkoutRecord } from "../types";
 import ImageModal from "./ImageModal";
 import Sheet from "./Sheet";
 
@@ -377,7 +377,7 @@ function RecordsTab({ presetBodyPartId }: { presetBodyPartId?: string }) {
       )}
 
       {/* フルスクリーン編集モーダル */}
-      {isFullScreen && (
+      {isFullScreen && form && (
         <div className="fixed inset-0 z-[100] flex flex-col bg-cream">
           <div className="flex items-center justify-between border-b border-sand bg-paper px-4 py-3">
             <h3 className="text-sm font-bold text-bark">記録を編集</h3>
