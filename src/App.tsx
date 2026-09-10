@@ -15,17 +15,25 @@ import { useUiStore } from "./store/useUiStore";
 export default function App() {
   const theme = useUiStore((s) => s.theme);
   const customGreeting = useUiStore((s) => s.customGreeting);
+  const fontSize = useUiStore((s) => s.fontSize);
 
-  // テーマをDOMに適用
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
+
+  useEffect(() => {
+    const sizeMap = {
+      small: "14px",
+      medium: "16px",
+      large: "18px",
+    };
+    document.documentElement.style.fontSize = sizeMap[fontSize];
+  }, [fontSize]);
 
   return (
     <div className="mx-auto min-h-dvh w-full max-w-md">
       <Header />
       <main className="px-4 pb-12">
-        {/* あいさつ */}
         <div className="anim-rise pt-5 pb-4">
           <p className="text-[10.5px] font-bold tracking-[0.22em] text-latte">{todayLong()}</p>
           <h1 className="mt-1 font-display text-[25px] leading-snug font-black text-bark">
@@ -41,10 +49,7 @@ export default function App() {
           </h1>
         </div>
 
-        {/* 上半分：今月の記録 */}
         <NowMonthSection />
-
-        {/* 下半分：各月の記録 */}
         <ArchiveSection />
 
         <footer className="mt-10 border-t border-dashed border-sand-deep pt-4 text-center">

@@ -1,4 +1,4 @@
-import { CalendarDays, ChevronDown, Copy, FileText, Layers, Pencil, Plus, Save, X, Trophy } from "lucide-react";
+import { CalendarDays, ChevronDown, Copy, FileText, Layers, Maximize, Pencil, Plus, Save, X, Trophy } from "lucide-react";
 import { useMemo, useState } from "react";
 import { bodyVisual } from "../data/meta";
 import { dayLabel, fmtNum, monthKeyOf, monthLabel, toIso } from "../lib/format";
@@ -29,6 +29,7 @@ export default function MuscleDetailSheet() {
   const [expandedRecords, setExpandedRecords] = useState<Set<string>>(new Set());
   const [editingRecord, setEditingRecord] = useState<WorkoutRecord | null>(null);
   const [editContent, setEditContent] = useState("");
+  const [isFullScreen, setIsFullScreen] = useState(false);
   const updateWorkoutRecord = useStore((s) => s.updateWorkoutRecord);
   const addWorkoutRecord = useStore((s) => s.addWorkoutRecord);
   const notify = useUiStore((s) => s.notify);
@@ -156,14 +157,24 @@ export default function MuscleDetailSheet() {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <p className="text-[10.5px] font-bold text-cocoa">{dayLabel(r.date)}</p>
-                      <button
-                        type="button"
-                        onClick={() => setEditingRecord(null)}
-                        className="tap rounded-full p-1 text-latte hover:bg-sand/60"
-                        aria-label="キャンセル"
-                      >
-                        <X size={14} />
-                      </button>
+                      <div className="flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() => setIsFullScreen(true)}
+                          className="tap rounded-full p-1 text-latte hover:bg-sand/60"
+                          aria-label="全画面で編集"
+                        >
+                          <Maximize size={14} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setEditingRecord(null)}
+                          className="tap rounded-full p-1 text-latte hover:bg-sand/60"
+                          aria-label="キャンセル"
+                        >
+                          <X size={14} />
+                        </button>
+                      </div>
                     </div>
                     <textarea
                       value={editContent}
@@ -237,12 +248,12 @@ export default function MuscleDetailSheet() {
                             alt={`画像 ${index + 1}`}
                             className="h-12 w-12 shrink-0 cursor-zoom-in rounded border border-sand object-cover transition hover:opacity-80"
                             onClick={() => setModalImage(img)}
-                          />
+                        />
                         ))}
                         {r.images.length > 3 && (
                           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded border border-sand bg-cream text-[10px] font-bold text-cocoa">
                             +{r.images.length - 3}
-                          </div>
+                        </div>
                         )}
                       </div>
                     )}
@@ -262,13 +273,13 @@ export default function MuscleDetailSheet() {
                         type="button"
                         onClick={() => {
                           const today = toIso(new Date());
-                          addWorkoutRecord({
-                            date: today,
-                            bodyPartId: r.bodyPartId,
-                            content: r.content,
-                            templateId: r.templateId,
-                            images: r.images,
-                          });
+                        addWorkoutRecord({
+                          date: today,
+                          bodyPartId: r.bodyPartId,
+                          content: r.content,
+                          templateId: r.templateId,
+                          images: r.images,
+                        });
                           notify("記録をコピーしました");
                         }}
                         className="tap flex items-center gap-1 rounded-lg border border-sand bg-cream px-2 py-1 text-[10px] font-bold text-cocoa transition hover:border-sand-deep hover:text-bark active:scale-95"
@@ -282,6 +293,48 @@ export default function MuscleDetailSheet() {
               </div>
             );
           })}
+        </div>
+      )}
+
+      {/* フルスクリーン編集モーダル */}
+      {isFullScreen && (
+        <div className="fixed inset-0 z-[100] flex flex-col bg-cream">
+          <div className="flex items-center justify-between border-b border-sand bg-paper px-4 py-3">
+            <h3 className="text-sm font-bold text-bark">記録を編集</h3>
+            <button
+              type="button"
+              onClick={() => setIsFullScreen(false)}
+              className="tap rounded-full border border-sand bg-cream p-2 text-cocoa transition hover:border-sand-deep active:scale-90"
+              aria-label="閉じる"
+            >
+              <X size={16} />
+            </button>
+          </div>
+          <div className="flex-1 overflow-auto p-4">
+            <textarea
+              value={editContent}
+              placeholder="記録内容を入力..."
+              onChange={(e) => setEditContent(e.target.value)}
+              className="h-full w-full resize-none rounded-lg border border-sand bg-paper p-4 text-base leading-relaxed text-bark placeholder:text-latte/60 focus:border-caramel focus:outline-none"
+              autoFocus
+            />
+          </div>
+          <div className="border-t border-sand bg-paper px-4 py-3">
+            <button
+              type="button"
+              onClick={() => {
+                if (editContent.trim()) {
+                  updateWorkoutRecord(editingRecord!.id, { content: editContent.trim() });
+                  setEditingRecord(null);
+                  notify("記録を更新しました");
+                }
+                setIsFullScreen(false);
+              }}
+              className="tap w-full rounded-lg bg-bark py-3 text-sm font-extrabold text-cream transition hover:bg-espresso active:scale-[0.98]"
+            >
+              保存して閉じる
+            </button>
+          </div>
         </div>
       )}
 

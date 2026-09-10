@@ -15,6 +15,7 @@ import {
   Smartphone,
   Target,
   Trash2,
+  Type,
   type LucideIcon,
 } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
@@ -371,6 +372,51 @@ function MuscleVisibilitySettings() {
   );
 }
 
+/** 文字サイズ変更コンポーネント */
+function FontSizeSelector() {
+  const fontSize = useUiStore((s) => s.fontSize);
+  const setFontSize = useUiStore((s) => s.setFontSize);
+  const notify = useUiStore((s) => s.notify);
+
+  const sizes = [
+    { id: "small" as const, label: "小", preview: "A", className: "text-xs" },
+    { id: "medium" as const, label: "中", preview: "A", className: "text-sm" },
+    { id: "large" as const, label: "大", preview: "A", className: "text-base" },
+  ];
+
+  return (
+    <div className="rounded-xl border border-sand bg-paper p-3">
+      <div className="mb-2 flex items-center gap-1.5">
+        <Type size={12} className="text-caramel-deep" />
+        <p className="text-[9.5px] font-bold tracking-[0.18em] text-latte">文字サイズ</p>
+      </div>
+      <div className="grid grid-cols-3 gap-2">
+        {sizes.map((size) => {
+          const active = fontSize === size.id;
+          return (
+            <button
+              key={size.id}
+              type="button"
+              onClick={() => {
+                setFontSize(size.id);
+                notify(`文字サイズを「${size.label}」に変更しました`);
+              }}
+              className={`tap flex flex-col items-center gap-1 rounded-lg border p-3 transition-all duration-200 active:scale-95 ${
+                active
+                  ? "border-caramel bg-caramel/10 shadow-soft"
+                  : "border-sand bg-cream hover:border-sand-deep"
+              }`}
+            >
+              <span className={`${size.className} font-bold text-bark`}>{size.preview}</span>
+              <span className="text-[10px] font-bold text-cocoa">{size.label}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 /** テーマ選択コンポーネント */
 function ThemeSelector() {
   const theme = useUiStore((s) => s.theme);
@@ -508,7 +554,6 @@ export default function SettingsSheet() {
     if (!file) return;
     setPendingFile(file);
     setImportConfirmOpen(true);
-    // inputをリセット（同じファイルを再度選択できるように）
     e.target.value = "";
   };
 
@@ -521,7 +566,6 @@ export default function SettingsSheet() {
       const text = await pendingFile.text();
       const data = JSON.parse(text) as Partial<BackupData>;
 
-      // バリデーション
       if (data.app !== "Kinroku") {
         throw new Error("このファイルはKinrokuのバックアップではありません");
       }
@@ -530,7 +574,6 @@ export default function SettingsSheet() {
         throw new Error("ファイルの形式が正しくありません");
       }
 
-      // インポート実行
       importData({
         bodyParts: data.bodyParts,
         workoutRecords: data.workoutRecords,
@@ -542,8 +585,6 @@ export default function SettingsSheet() {
 
       setPendingFile(null);
       notify("データをインポートしました");
-      
-      // 画面をリロードしてデータを反映
       setTimeout(() => window.location.reload(), 800);
     } catch (err) {
       setPendingFile(null);
@@ -622,6 +663,12 @@ export default function SettingsSheet() {
           />
         </div>
 
+        <GroupLabel>テーマ</GroupLabel>
+        <ThemeSelector />
+
+        <GroupLabel>文字サイズ</GroupLabel>
+        <FontSizeSelector />
+
         <GroupLabel>メッセージ</GroupLabel>
         <GreetingEditor />
 
@@ -630,9 +677,6 @@ export default function SettingsSheet() {
 
         <GroupLabel>部位カード</GroupLabel>
         <MuscleVisibilitySettings />
-
-        <GroupLabel>テーマ</GroupLabel>
-        <ThemeSelector />
 
         <GroupLabel>並び替え</GroupLabel>
         <div className="flex items-center gap-3 rounded-xl border border-sand bg-paper px-3.5 py-3">

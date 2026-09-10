@@ -6,6 +6,7 @@ import {
   Copy,
   FileText,
   Image as ImageIcon,
+  Maximize,
   Maximize2,
   Minimize2,
   Pencil,
@@ -126,6 +127,7 @@ function RecordsTab({ presetBodyPartId }: { presetBodyPartId?: string }) {
   const [isUploading, setIsUploading] = useState(false);
   const [modalImage, setModalImage] = useState<string | null>(null);
   const [textareaSize, setTextareaSize] = useState<"small" | "medium" | "large">("medium");
+  const [isFullScreen, setIsFullScreen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => setFilter(presetBodyPartId ?? null), [presetBodyPartId]);
@@ -142,9 +144,8 @@ function RecordsTab({ presetBodyPartId }: { presetBodyPartId?: string }) {
   const selectedMonth = useUiStore((s) => s.selectedMonth);
 
   const openAdd = () => {
-    // 選択月の月末をデフォルト日付に
     const [year, month] = selectedMonth.split("-").map(Number);
-    const monthEnd = new Date(year, month, 0); // 月の最終日
+    const monthEnd = new Date(year, month, 0);
     setForm({
       id: null,
       date: toIso(monthEnd),
@@ -205,15 +206,13 @@ function RecordsTab({ presetBodyPartId }: { presetBodyPartId?: string }) {
 
   return (
     <div>
-      {/* フィルター */}
-      <div className="mb-3 flex flex-wrap gap-1.5">
+      {/* 部位フィルター */}
+      <div className="no-scrollbar -mx-1 flex gap-1.5 overflow-x-auto px-1 pb-2">
         <button
           type="button"
           onClick={() => setFilter(null)}
-          className={`tap rounded-full border px-2.5 py-1 text-[10.5px] font-bold transition ${
-            !filter
-              ? "border-bark bg-bark text-cream"
-              : "border-sand bg-cream text-cocoa hover:border-sand-deep"
+          className={`tap shrink-0 rounded-full border px-2.5 py-1 text-[10.5px] font-bold transition active:scale-95 ${
+            filter === null ? "border-bark bg-bark text-cream" : "border-sand bg-paper text-cocoa"
           }`}
         >
           すべて
@@ -223,10 +222,8 @@ function RecordsTab({ presetBodyPartId }: { presetBodyPartId?: string }) {
             key={p.id}
             type="button"
             onClick={() => setFilter(p.id)}
-            className={`tap rounded-full border px-2.5 py-1 text-[10.5px] font-bold transition ${
-              filter === p.id
-                ? "border-bark bg-bark text-cream"
-                : "border-sand bg-cream text-cocoa hover:border-sand-deep"
+            className={`tap shrink-0 rounded-full border px-2.5 py-1 text-[10.5px] font-bold transition active:scale-95 ${
+              filter === p.id ? "border-bark bg-bark text-cream" : "border-sand bg-paper text-cocoa"
             }`}
           >
             {p.name}
@@ -234,7 +231,6 @@ function RecordsTab({ presetBodyPartId }: { presetBodyPartId?: string }) {
         ))}
       </div>
 
-      {/* 追加ボタン */}
       {!form && (
         <button
           type="button"
@@ -245,52 +241,44 @@ function RecordsTab({ presetBodyPartId }: { presetBodyPartId?: string }) {
         </button>
       )}
 
-      {/* 編集フォーム */}
       {form && (
-        <div className="anim-pop rounded-xl border border-caramel/50 bg-paper p-3.5">
+        <div className="anim-pop mt-2 rounded-xl border border-caramel/50 bg-paper p-3.5">
           <p className="mb-2 flex items-center justify-between text-[11px] font-extrabold text-caramel-deep">
             {form.id ? "記録を編集" : "新しい記録"}
-            <button
-              type="button"
-              onClick={() => setForm(null)}
-              className="tap rounded-full p-1 text-latte hover:bg-sand/60"
-            >
+            <button type="button" aria-label="閉じる" onClick={() => setForm(null)} className="tap rounded-full p-1 text-latte hover:bg-sand/60">
               <X size={13} />
             </button>
           </p>
-          <label className={labelCls}>日付</label>
-          <input
-            type="date"
-            value={form.date}
-            onChange={(e) => setForm({ ...form, date: e.target.value })}
-            className={inputCls}
-          />
-          <label className={labelCls}>部位</label>
-          <select
-            value={form.bodyPartId}
-            onChange={(e) => setForm({ ...form, bodyPartId: e.target.value })}
-            className={inputCls}
-          >
-            {orderedParts.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.name}
-              </option>
-            ))}
-          </select>
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className={labelCls}>日付</label>
+              <input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className={inputCls} />
+            </div>
+            <div>
+              <label className={labelCls}>部位</label>
+              <select
+                value={form.bodyPartId}
+                onChange={(e) => setForm({ ...form, bodyPartId: e.target.value })}
+                className={inputCls}
+              >
+                {orderedParts.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
           <label className={labelCls}>テンプレート（任意）</label>
           <select
             value={form.templateId}
             onChange={(e) => {
               const tpl = templates.find((t) => t.id === e.target.value);
-              setForm({
-                ...form,
-                templateId: e.target.value,
-                content: tpl ? tpl.content : form.content,
-              });
+              setForm({ ...form, templateId: e.target.value, content: tpl ? tpl.content : form.content });
             }}
             className={inputCls}
           >
-            <option value="">選択してください</option>
+            <option value="">使わない</option>
             {templates.map((t) => (
               <option key={t.id} value={t.id}>
                 {t.name}
@@ -319,6 +307,14 @@ function RecordsTab({ presetBodyPartId }: { presetBodyPartId?: string }) {
                 title="大きく"
               >
                 <Maximize2 size={12} />
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsFullScreen(true)}
+                className="tap rounded p-1 text-latte transition hover:text-cocoa"
+                title="全画面で編集"
+              >
+                <Maximize size={12} />
               </button>
             </div>
           </div>
@@ -377,6 +373,41 @@ function RecordsTab({ presetBodyPartId }: { presetBodyPartId?: string }) {
           <button type="button" onClick={save} className={saveBtn}>
             {form.id ? "更新する" : "保存する"}
           </button>
+        </div>
+      )}
+
+      {/* フルスクリーン編集モーダル */}
+      {isFullScreen && (
+        <div className="fixed inset-0 z-[100] flex flex-col bg-cream">
+          <div className="flex items-center justify-between border-b border-sand bg-paper px-4 py-3">
+            <h3 className="text-sm font-bold text-bark">記録を編集</h3>
+            <button
+              type="button"
+              onClick={() => setIsFullScreen(false)}
+              className="tap rounded-full border border-sand bg-cream p-2 text-cocoa transition hover:border-sand-deep active:scale-90"
+              aria-label="閉じる"
+            >
+              <X size={16} />
+            </button>
+          </div>
+          <div className="flex-1 overflow-auto p-4">
+            <textarea
+              value={form.content}
+              placeholder={"ベンチプレス 80kg × 8 × 3\nメモ：フォームを意識して丁寧に。"}
+              onChange={(e) => setForm({ ...form, content: e.target.value })}
+              className="h-full w-full resize-none rounded-lg border border-sand bg-paper p-4 text-base leading-relaxed text-bark placeholder:text-latte/60 focus:border-caramel focus:outline-none"
+              autoFocus
+            />
+          </div>
+          <div className="border-t border-sand bg-paper px-4 py-3">
+            <button
+              type="button"
+              onClick={() => setIsFullScreen(false)}
+              className="tap w-full rounded-lg bg-bark py-3 text-sm font-extrabold text-cream transition hover:bg-espresso active:scale-[0.98]"
+            >
+              完了
+            </button>
+          </div>
         </div>
       )}
 
@@ -485,7 +516,6 @@ function SizesTab() {
     [sizeRecords]
   );
 
-  // ページネーション
   const ITEMS_PER_PAGE = 15;
   const totalPages = Math.ceil(list.length / ITEMS_PER_PAGE);
   const currentPage = Math.min(page, Math.max(0, totalPages - 1));
@@ -494,9 +524,8 @@ function SizesTab() {
   const pageItems = list.slice(startIdx, endIdx);
 
   const openAdd = () => {
-    // 選択月の月末をデフォルト日付に
     const [year, month] = selectedMonth.split("-").map(Number);
-    const monthEnd = new Date(year, month, 0); // 月の最終日
+    const monthEnd = new Date(year, month, 0);
     setForm({
       id: null,
       date: toIso(monthEnd),
@@ -633,7 +662,6 @@ function SizesTab() {
         )}
       </div>
 
-      {/* ページネーション */}
       {totalPages > 1 && (
         <div className="mt-4 flex items-center justify-center gap-2">
           <button

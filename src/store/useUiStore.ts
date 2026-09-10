@@ -5,17 +5,16 @@ import type { SheetState } from "../types";
 
 export type ThemeId = "earth" | "paper" | "ember" | "neon" | "ocean" | "forest" | "midnight" | "pastel" | "vintage" | "monochrome" | "carbon" | "obsidian" | "cyberpunk" | "titanium";
 
+export type FontSize = "small" | "medium" | "large";
+
 interface UiStore {
   sheet: SheetState;
   toast: string | null;
-  /** 現在フォーカスされている月（"YYYY-MM"）。今月がデフォルト */
   selectedMonth: string;
-  /** 現在のテーマ */
   theme: ThemeId;
-  /** カスタム挨拶メッセージ（空の場合はデフォルトを使用） */
   customGreeting: string;
-  /** 非表示にする部位IDの配列 */
   hiddenMuscles: string[];
+  fontSize: FontSize;
   openSheet: (sheet: Exclude<SheetState, null>) => void;
   closeSheet: () => void;
   notify: (message: string) => void;
@@ -24,6 +23,7 @@ interface UiStore {
   setTheme: (theme: ThemeId) => void;
   setCustomGreeting: (message: string) => void;
   toggleMuscleVisibility: (muscleId: string) => void;
+  setFontSize: (size: FontSize) => void;
 }
 
 let toastTimer: ReturnType<typeof setTimeout> | undefined;
@@ -37,13 +37,13 @@ export const useUiStore = create<UiStore>()(
       theme: "earth",
       customGreeting: "",
       hiddenMuscles: [],
+      fontSize: "medium",
       openSheet: (sheet) => set({ sheet }),
       closeSheet: () => set({ sheet: null }),
       setSelectedMonth: (key) => set({ selectedMonth: key }),
       resetSelectedMonth: () => set({ selectedMonth: monthKeyOf(new Date()) }),
       setTheme: (theme) => {
         set({ theme });
-        // DOMにも反映
         document.documentElement.setAttribute("data-theme", theme);
       },
       setCustomGreeting: (message) => set({ customGreeting: message }),
@@ -53,6 +53,7 @@ export const useUiStore = create<UiStore>()(
             ? state.hiddenMuscles.filter((id) => id !== muscleId)
             : [...state.hiddenMuscles, muscleId],
         })),
+      setFontSize: (size) => set({ fontSize: size }),
       notify: (message) => {
         if (toastTimer) clearTimeout(toastTimer);
         set({ toast: message });
@@ -62,7 +63,6 @@ export const useUiStore = create<UiStore>()(
     {
       name: "kinroku-ui-v1",
       onRehydrateStorage: () => (state) => {
-        // 復元時にDOMにテーマを適用
         if (state?.theme) {
           document.documentElement.setAttribute("data-theme", state.theme);
         }
